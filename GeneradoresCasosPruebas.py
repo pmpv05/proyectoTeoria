@@ -9,20 +9,18 @@ def stringGenerator(length):
 
 
 def testRecursiveLCSLength(qtyTimes):
-
     for i in range(qtyTimes):
 
         fstString = stringGenerator(random.randint(1, 20))
         sndString = stringGenerator(random.randint(1, 20))
         print(fstString)
         print(sndString)
-        result = RecursiveLCSLength(fstString, sndString,
+        result = NaiveLCS(fstString, sndString,
                                     len(fstString)-1, len(sndString)-1)
         print(result)
 
 
 def testMemoryLCSLength(qtyTimes):
-
     for i in range(qtyTimes):
 
         fstString = stringGenerator(random.randint(1, 55))
@@ -30,7 +28,7 @@ def testMemoryLCSLength(qtyTimes):
         print(fstString)
         print(sndString)
         matrix = createMatrix(len(fstString), len(sndString))
-        result = MemoryLCSLength(fstString, sndString,
+        result = EfficientLCS(fstString, sndString,
                                  len(fstString)-1, len(sndString)-1, matrix)
         print(matrix)
         print(result)
@@ -42,7 +40,7 @@ def testIterativeLCSLength(qtyTimes):
         sndString = stringGenerator(random.randint(1, 55))
         print(fstString)
         print(sndString)
-        result = IterativeLCSLength(fstString, sndString)
+        result = bottomLCS(fstString, sndString)
         print(result)
 
 
