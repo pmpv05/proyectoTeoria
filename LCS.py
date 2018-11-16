@@ -1,3 +1,6 @@
+# coding=utf-8
+
+
 def Matrix(numero_filas, numero_columnas):
     return [[None]*numero_columnas for i in range(numero_filas)]
 
@@ -17,6 +20,7 @@ def NaiveLCS(A, B, a, b):
     elif A[a-1] == B[b-1]:
         return 1 + NaiveLCS(A, B, a-1, b-1)
     return max(NaiveLCS(A, B, a-1, b), NaiveLCS(A, B, a, b-1))
+
 
 def EfficientLCS(A, B, a, b, M):
     """
@@ -40,6 +44,7 @@ def EfficientLCS(A, B, a, b, M):
     M[a][b] = result
     return result
 
+
 def BottomLCS(A, B):
     """
     Cálcula la matriz de distancias a partir de 2 strings.
@@ -61,6 +66,7 @@ def BottomLCS(A, B):
             else:
                 M[a][b] = max(M[a-1][b], M[a][b-1])
     return M[a][b]
+
 
 def Backtrack(M, A, B, a, b):
     """

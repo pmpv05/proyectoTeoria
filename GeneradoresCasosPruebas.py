@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import random
 import string
 from LCS import *
@@ -16,7 +18,7 @@ def testRecursiveLCSLength(qtyTimes):
         print(fstString)
         print(sndString)
         result = NaiveLCS(fstString, sndString,
-                                    len(fstString)-1, len(sndString)-1)
+                          len(fstString)-1, len(sndString)-1)
         print(result)
 
 
@@ -27,10 +29,9 @@ def testMemoryLCSLength(qtyTimes):
         sndString = stringGenerator(random.randint(1, 55))
         print(fstString)
         print(sndString)
-        matrix = createMatrix(len(fstString), len(sndString))
+        matrix = Matrix(len(fstString), len(sndString))
         result = EfficientLCS(fstString, sndString,
-                                 len(fstString)-1, len(sndString)-1, matrix)
-        print(matrix)
+                              len(fstString)-1, len(sndString)-1, matrix)
         print(result)
 
 
@@ -40,11 +41,12 @@ def testIterativeLCSLength(qtyTimes):
         sndString = stringGenerator(random.randint(1, 55))
         print(fstString)
         print(sndString)
-        result = bottomLCS(fstString, sndString)
+        result = BottomLCS(fstString, sndString)
         print(result)
 
 
-# print([[0 for x in range(2)] for y in range(2)])
-#createMatrix(2, 8)
+testRecursiveLCSLength(1)
+print("----")
+testMemoryLCSLength(1)
+print("----")
 testIterativeLCSLength(1)
-# createMatrix2(6, 2)
