@@ -320,15 +320,15 @@ print("----------------- TEST NAIVE LCS -----------------")
 testNaiveLCS_Inst(1)
 # testNaiveLCS_Inst_DadosStrs("ccm", "uy", 1)
 
-# """" TEST EFFICIENT LCS """
-# print("----------------- TEST EFFICIENT LCS -----------------")
+"""" TEST EFFICIENT LCS """
+print("----------------- TEST EFFICIENT LCS -----------------")
 # testEfficientLCS(1)
 # testEfficientLCS_DadosStrs("ba", "a", 1)
 testEfficientLCS_Inst(1)
 # testEfficientLCS_Inst_DadosStrs("bac", "afgg", 1)
 
-# """" TEST BOTTOM LCS """
-# print("----------------- TEST BOTTOM LCS -----------------")
+"""" TEST BOTTOM LCS """
+print("----------------- TEST BOTTOM LCS -----------------")
 # testBottomLCS(1)
 # testBottomLCS_DatosStrs("a", "a", 1)
 testBottomLCS_Inst(1)
