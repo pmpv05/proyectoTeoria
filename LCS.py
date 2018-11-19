@@ -15,9 +15,9 @@ def NaiveLCS(A, B, a, b):
         a = Largo de la cadena - 1 del string A
         b = Largo de la cadena - 1 del string B
     """
-    if a == 0 or b == 0:
+    if a == -1 or b == -1:
         return 0
-    elif A[a-1] == B[b-1]:
+    elif A[a] == B[b]:
         return 1 + NaiveLCS(A, B, a-1, b-1)
     return max(NaiveLCS(A, B, a-1, b), NaiveLCS(A, B, a, b-1))
 
@@ -32,16 +32,17 @@ def EfficientLCS(A, B, a, b, M):
         a = Largo de la cadena - 1 del string A
         b = Largo de la cadena - 1 del string B
     """
-    if M[a][b] is not None:
-        return M[a][b]
-    elif a == 0 or b == 0:
+    if a == -1 or b == -1:
         result = 0
+    elif M[a][b] is not None:
+        return M[a][b]
     elif A[a] == B[b]:
         result = 1 + EfficientLCS(A, B, a-1, b-1, M)
     else:
         result = max(EfficientLCS(A, B, a-1, b, M),
                      EfficientLCS(A, B, a, b-1, M))
-    M[a][b] = result
+    if a > -1 and b > -1:
+        M[a][b] = result
     return result
 
 
