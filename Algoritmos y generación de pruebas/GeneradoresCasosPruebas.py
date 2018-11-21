@@ -4,7 +4,7 @@ import random
 import string
 import time
 from LCS import *
-from LCS_Alg_Instrumentados import *
+from LCS_Instrumentados import *
 
 
 def stringGenerator(length):
@@ -62,8 +62,8 @@ def testNaiveLCS_Inst(qtyTimes):
     print("Prueba Naive LCS (Recursivo) versión instrumentada: Mide pasos ejecutados y tiempo")
     for i in range(qtyTimes):
         print("--> Ejecución " + str(i))
-        strA = stringGenerator(random.randint(5, 20))
-        strB = stringGenerator(random.randint(5, 20))
+        strA = stringGenerator(random.randint(4, 16))
+        strB = stringGenerator(random.randint(4, 16))
         largoStrA = len(strA)
         largoStrB = len(strB)
         print("Cadena A (largo = " + str(largoStrA) + "): " + strA)
@@ -166,8 +166,8 @@ def testEfficientLCS_Inst(qtyTimes):
     print("Prueba Efficient LCS (Prog. Din. Rec.): Mide accesos a la matriz y tiempo")
     for i in range(qtyTimes):
         print("--> Ejecución "+str(i))
-        strA = stringGenerator(random.randint(10, 50))
-        strB = stringGenerator(random.randint(10, 50))
+        strA = stringGenerator(random.randint(20, 100))
+        strB = stringGenerator(random.randint(20, 100))
         largoStrA = len(strA)
         largoStrB = len(strB)
         print("Cadena A (largo = " + str(largoStrA) + "): " + strA)
@@ -185,7 +185,7 @@ def testEfficientLCS_Inst(qtyTimes):
                               largoStrA - 1, largoStrB - 1, matrix)
         timeResult = (time.perf_counter_ns() - start) / 1e9
 
-        print("Tiempo real (segundos): " + str(timeResult))
+        print("Tiempo real (segundos): " + str('{0:.10f}'.format(timeResult)))
 
         print("Resultado: " + str(result) + "\n")
 
@@ -265,8 +265,8 @@ def testBottomLCS_Inst(qtyTimes):
     print("Prueba Efficient LCS (Prog. Din. Rec.): Mide accesos a la matriz y tiempo")
     for i in range(qtyTimes):
         print("--> Ejecución "+str(i))
-        strA = stringGenerator(random.randint(10, 50))
-        strB = stringGenerator(random.randint(10, 50))
+        strA = stringGenerator(random.randint(10, 70))
+        strB = stringGenerator(random.randint(10, 70))
         largoStrA = len(strA)
         largoStrB = len(strB)
         print("Cadena A (largo = " + str(largoStrA) + "): " + strA)
@@ -317,19 +317,19 @@ def testBottomLCS_Inst_DadosStrs(A, B, qtyTimes):
 print("----------------- TEST NAIVE LCS -----------------")
 # testNaiveLCS(1)
 # testNaiveLCS_DadosStrs("a", "a", 1)
-testNaiveLCS_Inst(1)
+# testNaiveLCS_Inst(100)
 # testNaiveLCS_Inst_DadosStrs("ccm", "uy", 1)
 
 """" TEST EFFICIENT LCS """
 print("----------------- TEST EFFICIENT LCS -----------------")
 # testEfficientLCS(1)
 # testEfficientLCS_DadosStrs("ba", "a", 1)
-testEfficientLCS_Inst(1)
+# testEfficientLCS_Inst(100)
 # testEfficientLCS_Inst_DadosStrs("bac", "afgg", 1)
 
 """" TEST BOTTOM LCS """
 print("----------------- TEST BOTTOM LCS -----------------")
 # testBottomLCS(1)
 # testBottomLCS_DatosStrs("a", "a", 1)
-testBottomLCS_Inst(1)
+# testBottomLCS_Inst(100)
 # testBottomLCS_Inst_DadosStrs("bac", "afgg", 1)
