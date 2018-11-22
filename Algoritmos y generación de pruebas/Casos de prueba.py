@@ -21,7 +21,7 @@ def testNaiveLCSUnCaso(largoA, largoB):
     # Tiempo en ms y pasos ejecutados
     start = time.perf_counter_ns()
     pasosEjecutados = NaiveLCS_Inst(strA, strB,
-                                    largoA, largoB)
+                                    largoA-1, largoB-1)
     timeResult = (time.perf_counter_ns() - start) / 1e6
 
     return Resultado(strA, strB, pasosEjecutados, timeResult, pow((largoA*largoB), 2), pow(2, (largoA+largoB)))
@@ -34,7 +34,7 @@ def testEfficientLCSUnCaso(largoA, largoB):
     # Tiempo en ms y pasos ejecutados
     start = time.perf_counter_ns()
     pasosEjecutados = EfficientLCS_Inst(strA, strB,
-                                        largoA, largoB, Matrix(largoA, largoB))
+                                        largoA-1, largoB-1, Matrix(largoA, largoB))
     timeResult = (time.perf_counter_ns() - start) / 1e6
 
     return Resultado(strA, strB, pasosEjecutados, timeResult, pow((min(largoA, largoB), 2)), largoA*largoB)
