@@ -15,9 +15,9 @@ def NaiveLCS_Inst(A, B, a, b):
         a = Largo de la cadena - 1 del string A
         b = Largo de la cadena - 1 del string B
     """
-    if a == 0 or b == 0:
+    if a == -1 or b == -1:
         return 1
-    elif A[a-1] == B[b-1]:
+    elif A[a] == B[b]:
         return 1 + NaiveLCS_Inst(A, B, a-1, b-1)
     else:
         return 1 + NaiveLCS_Inst(A, B, a-1, b) + NaiveLCS_Inst(A, B, a, b-1)
@@ -30,20 +30,29 @@ def EfficientLCS_Inst(A, B, a, b, M):
     DINAMICO: TIEMPO POLINOMICO A*B
         A = Primer string
         B = Segundo string
-        a = Largo de la cadena del string A
-        b = Largo de la cadena del string B
+        a = Largo de la cadena - 1 del string A
+        b = Largo de la cadena - 1 del string B
     """
-    if M[a-1][b-1] is not None:
+    if a == -1 or b == -1:
         return 1
-    elif a == 0 or b == 0:
-        result = 1
-    elif A[a-1] == B[b-1]:
+    if M[a][b] is not None:
+        return 0
+    elif A[a] == B[b]:
         result = 1 + EfficientLCS_Inst(A, B, a-1, b-1, M)
     else:
         result = 1 + EfficientLCS_Inst(A, B, a-1, b, M) + \
             EfficientLCS_Inst(A, B, a, b-1, M)
-    M[a-1][b-1] = 0
+
+    if a > -1 and b > -1:
+        M[a][b] = result
+
     return result
+
+
+str1 = 'dabs'
+str2 = 'dfdsf'
+print(EfficientLCS_Inst(str1, str2, len(str1)-1,
+                        len(str2)-1, Matrix(len(str1), len(str2))))
 
 
 def BottomLCS_Inst(A, B):

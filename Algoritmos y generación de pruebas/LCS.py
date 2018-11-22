@@ -41,8 +41,10 @@ def EfficientLCS(A, B, a, b, M):
     else:
         result = max(EfficientLCS(A, B, a-1, b, M),
                      EfficientLCS(A, B, a, b-1, M))
+
     if a > -1 and b > -1:
         M[a][b] = result
+
     return result
 
 
@@ -80,3 +82,11 @@ def Backtrack(M, A, B, a, b):
     elif M[a, b-1] > M[a-1, b]:
         return Backtrack(M, A, B, a, b-1)
     return Backtrack(M, A, B, a-1, b)
+
+
+str1 = 'dfasfdadsfa'
+str2 = 'fdsafsdafds'
+print(EfficientLCS(str1, str2, len(str1)-1,
+                   len(str2)-1, Matrix(len(str1), len(str2))))
+
+print(BottomLCS(str1, str2))
