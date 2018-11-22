@@ -57,6 +57,7 @@ def testNaiveLCS_DadosStrs(A, B, qtyTimes):
 
         print("Resultado: " + str(result) + "\n")
 
+arrayNaiveResultados = []
 
 def testNaiveLCS_Inst(qtyTimes):
     print("Prueba Naive LCS (Recursivo) versión instrumentada: Mide pasos ejecutados y tiempo")

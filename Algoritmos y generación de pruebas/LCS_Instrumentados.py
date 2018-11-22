@@ -5,7 +5,7 @@ def Matrix(numero_filas, numero_columnas):
     return [[None]*numero_columnas for i in range(numero_filas)]
 
 
-def NaiveLCS_Inst(A, B, a, b, lstPasos):
+def NaiveLCS_Inst(A, B, a, b):
     """
     Cálcula el largo de la LCS entre dos strings.
     Recursivo.
@@ -15,55 +15,38 @@ def NaiveLCS_Inst(A, B, a, b, lstPasos):
         a = Largo de la cadena - 1 del string A
         b = Largo de la cadena - 1 del string B
     """
-
-    if a == -1 or b == -1:
-        lstPasos.append(1)
-        result = 0
-    elif A[a] == B[b]:
-        lstPasos.append(1)
-        result = 1 + NaiveLCS_Inst(A, B, a-1, b-1, lstPasos)
+    if a == 0 or b == 0:
+        return 1
+    elif A[a-1] == B[b-1]:
+        return 1 + NaiveLCS_Inst(A, B, a-1, b-1)
     else:
-        lstPasos.append(1)
-        result = max(NaiveLCS_Inst(A, B, a-1, b, lstPasos),
-                     NaiveLCS_Inst(A, B, a, b-1, lstPasos))
-
-    if(a == len(A)-1 and b == len(B)-1):
-        print("Pasos ejecutados: " + str(sum(lstPasos)))
-    return result
+        return 1 + NaiveLCS_Inst(A, B, a-1, b) + NaiveLCS_Inst(A, B, a, b-1)
 
 
-def EfficientLCS_Inst(A, B, a, b, M, lstAccesosMatriz):
+def EfficientLCS_Inst(A, B, a, b, M):
     """
     Cálcula la matriz de distancias a partir de 2 strings.
     Recursivo. Memoriza resultados intermedios.
     DINAMICO: TIEMPO POLINOMICO A*B
         A = Primer string
         B = Segundo string
-        a = Largo de la cadena - 1 del string A
-        b = Largo de la cadena - 1 del string B
+        a = Largo de la cadena del string A
+        b = Largo de la cadena del string B
     """
-    if a == -1 or b == -1:
-        result = 0
-    elif M[a][b] is not None:
-        lstAccesosMatriz.append(1)
-        return M[a][b]
-    elif A[a] == B[b]:
-        lstAccesosMatriz.append(1)
-        result = 1 + EfficientLCS_Inst(A, B, a-1, b-1, M, lstAccesosMatriz)
+    if M[a-1][b-1] is not None:
+        return 1
+    elif a == 0 or b == 0:
+        result = 1
+    elif A[a-1] == B[b-1]:
+        result = 1 + EfficientLCS_Inst(A, B, a-1, b-1, M)
     else:
-        lstAccesosMatriz.append(1)
-        result = max(EfficientLCS_Inst(A, B, a-1, b, M, lstAccesosMatriz),
-                     EfficientLCS_Inst(A, B, a, b-1, M, lstAccesosMatriz))
-    if a > -1 and b > -1:
-        lstAccesosMatriz.append(1)
-        M[a][b] = result
-
-    if(a == len(A)-1 and b == len(B)-1):
-        print("Accesos a matriz: " + str(sum(lstAccesosMatriz)))
+        result = 1 + EfficientLCS_Inst(A, B, a-1, b, M) + \
+            EfficientLCS_Inst(A, B, a, b-1, M)
+    M[a-1][b-1] = 0
     return result
 
 
-def BottomLCS_Inst(A, B, accesosMatriz):
+def BottomLCS_Inst(A, B):
     """
     Cálcula la matriz de distancias a partir de 2 strings.
     Iterativo. Memoriza resultados previos.
@@ -71,6 +54,7 @@ def BottomLCS_Inst(A, B, accesosMatriz):
         A = Primer string
         B = Segundo string
     """
+    accesosMatriz = 0
     len_A = len(A)
     len_B = len(B)
     M = Matrix(len_A+1, len_B+1)
@@ -87,18 +71,4 @@ def BottomLCS_Inst(A, B, accesosMatriz):
                 accesosMatriz += 1
                 M[a][b] = max(M[a-1][b], M[a][b-1])
 
-    print("Accesos a matriz: " + str(accesosMatriz))
-    return M[a][b]
-
-
-def Backtrack(M, A, B, a, b):
-    """
-    Obtiene la LCS a partir de la matriz de distancias.
-    """
-    if a == 0 or b == 0:
-        return ""
-    elif A[a-1] == B[b-1]:
-        return A[a-1] + Backtrack(M, A, B, a-1, b-1)
-    elif M[a, b-1] > M[a-1, b]:
-        return Backtrack(M, A, B, a, b-1)
-    return Backtrack(M, A, B, a-1, b)
+    return accesosMatriz
