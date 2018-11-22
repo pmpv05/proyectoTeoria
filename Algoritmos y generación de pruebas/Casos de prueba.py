@@ -10,11 +10,20 @@ from Resultado import *
 
 
 def stringGenerator(length):
+    """
+    Devuelve una cadena aleatoria de letras minúsculas.
+        length = Largo que debe tener la cadena
+    """
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(length))
 
 
 def testNaiveLCSUnCaso(largoA, largoB):
+    """
+    Ejecuta el algoritmo NAIVE (INGENUO: TIEMPO EXPONENCIAL) y devuelve un objeto Resultado con todos los datos de la ejecución.
+        largoA = Largo que debe tener la primera cadena
+        largoB = Largo que debe tener la segunda cadena
+    """
     strA = stringGenerator(largoA)
     strB = stringGenerator(largoB)
 
@@ -28,6 +37,11 @@ def testNaiveLCSUnCaso(largoA, largoB):
 
 
 def testEfficientLCSUnCaso(largoA, largoB):
+    """
+    Ejecuta el algoritmo EFFICIENT (DINAMICO) y devuelve un objeto Resultado con todos los datos de la ejecución.
+        largoA = Largo que debe tener la primera cadena
+        largoB = Largo que debe tener la segunda cadena
+    """
     strA = stringGenerator(largoA)
     strB = stringGenerator(largoB)
 
@@ -41,6 +55,11 @@ def testEfficientLCSUnCaso(largoA, largoB):
 
 
 def testBottomLCSUnCaso(largoA, largoB):
+    """
+    Ejecuta el algoritmo BOTTOM (DINAMICO) y devuelve un objeto Resultado con todos los datos de la ejecución.
+        largoA = Largo que debe tener la primera cadena
+        largoB = Largo que debe tener la segunda cadena
+    """
     strA = stringGenerator(largoA)
     strB = stringGenerator(largoB)
 
@@ -52,11 +71,17 @@ def testBottomLCSUnCaso(largoA, largoB):
     return Resultado(strA, strB, pasosEjecutados, timeResult, pow((min(largoA, largoB), 2)), largoA*largoB)
 
 
-def testNCasos(qtyTimes, fun, maximo):
+def testNCasos(qtyTimes, algoritmo, maximo):
+    """
+    Ejecuta el algoritmo pasado como parámetro (algoritmo) qtyTimes veces y devuelve un 
+        qtyTimes = Cantidad de veces a ejecutar el algoritmo
+        algoritmo = Largo que debe tener la segunda cadena
+        maximo
+    """
     arrResultados = []
     for i in range(qtyTimes):
         arrResultados.append(
-            fun(random.randint(5, maximo), random.randint(5, maximo)))
+            algoritmo(random.randint(5, maximo), random.randint(5, maximo)))
     return arrResultados
 
 

@@ -2,6 +2,11 @@
 
 
 def Matrix(numero_filas, numero_columnas):
+    """
+    Crea una matriz.
+        numero_filas = Número de filas que debe tener la matriz
+        numero_columnas = Número de columnas que debe tener la matriz
+    """
     return [[None]*numero_columnas for i in range(numero_filas)]
 
 
