@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Resultado:
     def __init__(self, cadA, cadB, pasos, tiempo, hipA, hipB):
         self.cadA = cadA
@@ -13,27 +12,27 @@ class Resultado:
         self.hipB = hipB
 
     def __str__(self):
-        return "Cadena A:"+str(self.cadA)+", "+str(self.cadB)+", "+str(self.pasos) + ", " + str(self.tiempo)+", "+str(self.largoA)+", "+str(self.largoB)
+        return "Cadena A:"+str(self.cadA)+", "+str(self.cadB)+", "+str(self.Pasos) + ", " + str(self.tiempo)+", "+str(self.largoA)+", "+str(self.largoB)
 
     @staticmethod
-    def pasos(arrayResultados):
+    def Pasos(arrayResultados):
         return np.array([x.pasos for x in arrayResultados])
 
     @staticmethod
-    def tiempos(arrayResultados):
+    def Tiempos(arrayResultados):
         return np.array([x.tiempo for x in arrayResultados])
 
     @staticmethod
-    def hipotesisA(arrayResultados):
+    def HipotesisA(arrayResultados):
         return np.array([x.hipA for x in arrayResultados])
 
     @staticmethod
-    def hipotesisB(arrayResultados):
+    def HipotesisB(arrayResultados):
         return np.array([x.hipB for x in arrayResultados])
 
     @staticmethod
-    def errores(xx, yy):
+    def Errores(x, y):
         arr = []
-        for i in range(len(xx)):
-            arr.append(yy[i]-xx[i])
+        for i in range(len(x)):
+            arr.append(y[i]-x[i])
         return np.array(arr)

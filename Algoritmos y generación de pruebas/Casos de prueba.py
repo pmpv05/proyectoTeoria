@@ -5,98 +5,82 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
+from Resultado import Resultado as R
 from LCS_Instrumentados import *
 from Resultado import *
 
 
-def stringGenerator(length):
-    letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(length))
+def GenerateRandomString(length):
+	letters = string.ascii_letters + string.digits
+	return ''.join(random.choice(letters) for i in range(length))
 
+def GenerateNaive(largoA, largoB):
+	strA = GenerateRandomString(largoA)
+	strB = GenerateRandomString(largoB)
 
-def testNaiveLCSUnCaso(largoA, largoB):
-    strA = stringGenerator(largoA)
-    strB = stringGenerator(largoB)
+	# Tiempo en ms y pasos ejecutados
+	start = time.perf_counter_ns()
+	pasosEjecutados = NaiveLCS_Inst(strA, strB, largoA, largoB)
+	timeResult = (time.perf_counter_ns() - start) / 1e6
 
-    # Tiempo en ms y pasos ejecutados
-    start = time.perf_counter_ns()
-    pasosEjecutados = NaiveLCS_Inst(strA, strB,
-                                    largoA-1, largoB-1)
-    timeResult = (time.perf_counter_ns() - start) / 1e6
+	return Resultado(strA, strB, pasosEjecutados, timeResult, pow((largoA*largoB), 2), pow(2, (largoA+largoB)))
 
-    return Resultado(strA, strB, pasosEjecutados, timeResult, pow((largoA*largoB), 2), pow(2, (largoA+largoB)))
+def GenerateEfficient(largoA, largoB):
+	strA = GenerateRandomString(largoA)
+	strB = GenerateRandomString(largoB)
 
+	# Tiempo en ms y pasos ejecutados
+	start = time.perf_counter_ns()
+	pasosEjecutados = EfficientLCS_Inst(strA, strB,largoA, largoB, Matrix(largoA+1, largoB+1))
+	timeResult = (time.perf_counter_ns() - start) / 1e6
 
-def testEfficientLCSUnCaso(largoA, largoB):
-    strA = stringGenerator(largoA)
-    strB = stringGenerator(largoB)
+	return Resultado(strA, strB, pasosEjecutados, timeResult, pow(min(largoA, largoB), 2),largoA*largoB)
 
-    # Tiempo en ms y pasos ejecutados
-    start = time.perf_counter_ns()
-    pasosEjecutados = EfficientLCS_Inst(strA, strB,
-                                        largoA-1, largoB-1, Matrix(largoA, largoB))
-    timeResult = (time.perf_counter_ns() - start) / 1e6
+def GenerateBottom(largoA, largoB):
+	strA = GenerateRandomString(largoA)
+	strB = GenerateRandomString(largoB)
 
-    return Resultado(strA, strB, pasosEjecutados, timeResult, pow((min(largoA, largoB), 2)), largoA*largoB)
+	# Tiempo en ms y pasos ejecutados
+	start = time.perf_counter_ns()
+	pasosEjecutados = BottomLCS_Inst(strA, strB)
+	timeResult = (time.perf_counter_ns() - start) / 1e6
 
+	return Resultado(strA, strB, pasosEjecutados, timeResult, pow((min(largoA, largoB), 2)), largoA*largoB)
 
-def testBottomLCSUnCaso(largoA, largoB):
-    strA = stringGenerator(largoA)
-    strB = stringGenerator(largoB)
+def GenerateTestSample(n, LCS, maximo):
+	arrResultados = []
+	for i in range(n):
+		arrResultados.append(LCS(random.randint(5, maximo), random.randint(5, maximo)))
+	return arrResultados
 
-    # Tiempo en ms y pasos ejecutados
-    start = time.perf_counter_ns()
-    pasosEjecutados = BottomLCS_Inst(strA, strB)
-    timeResult = (time.perf_counter_ns() - start) / 1e6
+def TestHipotesis(resultados, hip):
+	hipA    = hip(resultados)
+	pasos   = R.Pasos(resultados)
+	tiempos = R.Tiempos(resultados)
 
-    return Resultado(strA, strB, pasosEjecutados, timeResult, pow((min(largoA, largoB), 2)), largoA*largoB)
+	h_pasos = np.vstack([hipA, np.ones(len(hipA))]).T
+	m_pasos, c_pasos = np.linalg.lstsq(h_pasos, pasos, rcond=None)[0]
+	y_pasos = m_pasos * hipA + c_pasos
 
+	h_tiempos = np.vstack([hipA, np.ones(len(hipA))]).T
+	m_tiempos, c_tiempos = np.linalg.lstsq(h_tiempos, tiempos, rcond=None)[0]
+	y_tiempos = m_tiempos * hipA + c_tiempos
 
-def testNCasos(qtyTimes, fun, maximo):
-    arrResultados = []
-    for i in range(qtyTimes):
-        arrResultados.append(
-            fun(random.randint(5, maximo), random.randint(5, maximo)))
-    return arrResultados
+	fig, axis = plt.subplots(2, 1, constrained_layout = True)
+	axis[0].plot(hipA, pasos, 'go', label='Empírico')
+	axis[0].plot(hipA, y_pasos, 'r-', label='Teórico')
+	axis[0].set_title("Pasos")
 
+	axis[1].plot(hipA, tiempos, 'go', label='Empírico')
+	axis[1].plot(hipA, y_tiempos, 'r-', label='Teórico')
+	axis[1].set_title("Tiempo")
 
-a = testNCasos(50, testNaiveLCSUnCaso, 10)
-for i in range(len(a)):
-    print(a[i])
+	k2, p = stats.normaltest(R.Errores(pasos, y_pasos))
+	alpha = 1e-3
+	if p < alpha:  # null hypothesis: x comes from a normal distribution
+		fig.suptitle("The null hypothesis can be rejected")
+	else:
+		fig.suptitle("The null hypothesis cannot be rejected")	
+	plt.show()
 
-arrHipA = Resultado.hipotesisA(a)
-arrHipB = Resultado.hipotesisB(a)
-tiempos = Resultado.tiempos(a)
-pasos = Resultado.pasos(a)
-
-print("------- NAIVE HIPOTESIS 1 - PASOS EJECUTADOS -------")
-hip1 = "(m*n)^2"
-print("Se pretende llegar a una función y = mx + c, según el orden definido.")
-
-# Cálculo de función de tiempo
-A = np.vstack([arrHipB, np.ones(len(arrHipB))]).T
-m, c = np.linalg.lstsq(A, pasos, rcond=None)[0]
-
-funcionNaiveHip1Pasos = "y = " + str(m) + "x + " + str(c)
-print("==> La función es: " + funcionNaiveHip1Pasos +
-      " para HIPOTESIS 1 = " + hip1 + " y PASOS EJECUTADOS.")
-
-y = m * arrHipB + c
-# Gráfica
-# plt.plot(arrHipA, pasos, 'o', label='Original data', markersize=10)
-# plt.plot(arrHipA, y, 'r', label='Fitted line')
-# plt.legend()
-# plt.show()
-
-print(y[5])
-print(pasos[5])
-print(Resultado.errores(pasos, y)[5])
-
-k2, p = stats.normaltest(Resultado.errores(pasos, y))
-alpha = 1e-3
-print("p = {:g}".format(p))
-p = 3.27207e-11
-if p < alpha:  # null hypothesis: x comes from a normal distribution
-    print("The null hypothesis can be rejected")
-else:
-    print("The null hypothesis cannot be rejected")
+TestHipotesis(GenerateTestSample(50, GenerateEfficient, 50), R.HipotesisA)
