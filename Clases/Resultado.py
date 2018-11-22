@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 class Resultado:
     def __init__(self, cadA, cadB, pasos, tiempo, hipA, hipB):
@@ -8,11 +9,11 @@ class Resultado:
         self.tiempo = tiempo
         self.largoA = len(cadA)
         self.largoB = len(cadB)
-        self.hipA = hipA
-        self.hipB = hipB
+        self.hipA = math.ceil(hipA)
+        self.hipB = math.ceil(hipB)
 
     def __str__(self):
-        return "Cadena A:"+str(self.cadA)+", "+str(self.cadB)+", "+str(self.Pasos) + ", " + str(self.tiempo)+", "+str(self.largoA)+", "+str(self.largoB)
+        return "{0},{1},{2},{3},{4},{5},{6},{7}".format(self.cadA, self.largoA, self.cadB, self.largoB, self.pasos, self.tiempo, self.hipA, self.hipB)
 
     @staticmethod
     def Pasos(arrayResultados):
