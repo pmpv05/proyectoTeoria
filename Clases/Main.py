@@ -51,7 +51,7 @@ def Main():
     while True:
         a, n, l, h = Menu()
         print("\nEjecutando...\n")
-        name = Test.GenerateRandomString(10)
+        name, _ = Test.GenerateRandomString(10, False)
         test = Test.GenerateTestSample(n, a, l)
         Test.TestHipotesis(test, h, True, name)
         Test.SaveToCSV(test, name)
