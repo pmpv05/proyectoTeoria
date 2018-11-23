@@ -16,20 +16,20 @@ class Resultado:
         return "{0},{1},{2},{3},{4},{5},{6},{7}".format(self.cadA, self.largoA, self.cadB, self.largoB, self.pasos, self.tiempo, self.hipA, self.hipB)
 
     @staticmethod
-    def Pasos(arrayResultados):
-        return np.array([x.pasos for x in arrayResultados])
+    def Pasos(results):
+        return np.array([x.pasos for x in results])
 
     @staticmethod
-    def Tiempos(arrayResultados):
-        return np.array([x.tiempo for x in arrayResultados])
+    def Tiempos(results):
+        return np.array([x.tiempo for x in results])
 
     @staticmethod
-    def HipotesisA(arrayResultados):
-        return np.array([x.hipA for x in arrayResultados])
+    def HipotesisA(results):
+        return np.array([x.hipA for x in results])
 
     @staticmethod
-    def HipotesisB(arrayResultados):
-        return np.array([x.hipB for x in arrayResultados])
+    def HipotesisB(results):
+        return np.array([x.hipB for x in results])
 
     @staticmethod
     def Errores(x, y):

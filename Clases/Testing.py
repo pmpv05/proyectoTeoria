@@ -49,14 +49,14 @@ class Test:
 		return Resultado(strA, strB, pasos, tiempo, pow((min(lengthA, lengthB), 2)), lengthA*lengthB)
 
 	@staticmethod
-	def GenerateTestSample(n, LCS, maximo, minimo = 1):
+	def GenerateTestSample(n, lcs, maximo, minimo = 1):
 		arrResultados = []
-		for i in range(n):
-			arrResultados.append(LCS(random.randint(minimo, maximo), random.randint(minimo, maximo)))
+		for _ in range(n):
+			arrResultados.append(lcs(random.randint(minimo, maximo), random.randint(minimo, maximo)))
 		return arrResultados
 
 	@staticmethod
-	def TestHipotesis(results, hip, save = False, name = ""):
+	def TestHipotesis(results, hip, save = False, name = "", show = True):
 		hipA    = hip(results)
 		pasos   = Resultado.Pasos(results)
 		tiempos = Resultado.Tiempos(results)
@@ -78,8 +78,8 @@ class Test:
 		axis[1].plot(hipA, y_tiempos, 'r-', label='Teórico')
 		axis[1].set_title("Tiempo")
 
-		k2, p = stats.normaltest(Resultado.Errores(pasos, y_pasos))
-		alpha = 1e-3
+		_, p = stats.normaltest(Resultado.Errores(pasos, y_pasos))
+		alpha = 0.05
 		if p < alpha:  # null hypothesis: x comes from a normal distribution
 			fig.suptitle("La hipotesis puede ser rechazada")
 		else:
@@ -91,7 +91,29 @@ class Test:
 				os.makedirs(current_path)
 			fig.savefig(current_path + "/" + name + ".png")
 
-		plt.show()
+		if show:
+			plt.show()
+
+	@staticmethod
+	def TestAll(n = 10000, l = 100):
+		prueba = Test.GenerateTestSample(n, Test.GenerateNaive, l)
+		Test.TestHipotesis(prueba, Resultado.HipotesisA, True, "NAIVE - HIP A", False)
+		Test.SaveToCSV(prueba, "NAIVE - HIP A")
+		Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "NAIVE - HIP B", False)
+		Test.SaveToCSV(prueba, "NAIVE - HIP B")
+
+		prueba = Test.GenerateTestSample(n, Test.GenerateEfficient, l)
+		Test.TestHipotesis(prueba, Resultado.HipotesisA, True, "EFFICIENT - HIP A", False)
+		Test.SaveToCSV(prueba, "EFFICIENT - HIP A")
+		Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "EFFICIENT - HIP B", False)
+		Test.SaveToCSV(prueba, "EFFICIENT - HIP B")
+
+		prueba = Test.GenerateTestSample(n, Test.GenerateBottom, l)
+		Test.TestHipotesis(prueba, Resultado.HipotesisA, True, "BOTTOM-UP - HIP A", False)
+		Test.SaveToCSV(prueba, "BOTTOM-UP - HIP A")
+		Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "BOTTOM-UP - HIP B", False)
+		Test.SaveToCSV(prueba, "BOTTOM-UP - HIP B")
+
 
 	@staticmethod
 	def SaveToCSV(results, name):
@@ -102,3 +124,5 @@ class Test:
 			csv.write("Cadena A,Largo A,Cadena B,Largo B,Pasos,Tiempo,Hipotesis A,HipotesisB\n")
 			for result in results:
 				csv.write(str(result) + "\n")
+
+Test.TestAll(10000, 50)
