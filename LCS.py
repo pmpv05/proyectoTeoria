@@ -11,8 +11,8 @@ class LCS:
 		INGENUO: TIEMPO EXPONENCIAL
 			A = Primer string
 			B = Segundo string
-			a = Largo de la cadena del string A
-			b = Largo de la cadena del string B
+			a = Largo de la cadena A
+			b = Largo de la cadena B
 		"""
 		if a == 0 or b == 0:
 			return 1
@@ -28,8 +28,8 @@ class LCS:
 		DINAMICO: TIEMPO POLINOMICO A*B
 			A = Primer string
 			B = Segundo string
-			a = Largo de la cadena del string A
-			b = Largo de la cadena del string B
+			a = Largo de la cadena A
+			b = Largo de la cadena B
 			M = Matrix(a+1,b+1)
 		"""
 		if M[a][b] is not None:
@@ -79,12 +79,12 @@ class LCS:
 		INGENUO: TIEMPO EXPONENCIAL
 			A = Primer string
 			B = Segundo string
-			a = Largo de la cadena - 1 del string A
-			b = Largo de la cadena - 1 del string B
+			a = Largo de la cadena A
+			b = Largo de la cadena B
 		"""
-		if a == -1 or b == -1:
+		if a == 0 or b == 0:
 			return 0
-		elif A[a] == B[b]:
+		elif A[a-1] == B[b-1]:
 			return 1 + LCS.NaiveLCS(A, B, a-1, b-1)
 		return max(LCS.NaiveLCS(A, B, a-1, b), LCS.NaiveLCS(A, B, a, b-1))
 
@@ -96,21 +96,19 @@ class LCS:
 		DINAMICO: TIEMPO POLINOMICO A*B
 			A = Primer string
 			B = Segundo string
-			a = Largo de la cadena - 1 del string A
-			b = Largo de la cadena - 1 del string B
+			a = Largo de la cadena A
+			b = Largo de la cadena B
+			M = Matrix(a+1,b+1)
 		"""
-		if a == -1 or b == -1:
-			result = 0
-		elif M[a][b] is not None:
+		if M[a][b] is not None:
 			return M[a][b]
-		elif A[a] == B[b]:
+		elif a == 0 or b == 0:
+			result = 0
+		elif A[a-1] == B[b-1]:
 			result = 1 + LCS.EfficientLCS(A, B, a-1, b-1, M)
 		else:
 			result = max(LCS.EfficientLCS(A, B, a-1, b, M), LCS.EfficientLCS(A, B, a, b-1, M))
-
-		if a > -1 and b > -1:
-			M[a][b] = result
-
+		M[a][b] = result
 		return result
 
 	@staticmethod
