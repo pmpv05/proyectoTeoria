@@ -11,10 +11,11 @@ class Resultado:
 		self.largoB = len(cadB)
 		self.hipA = math.ceil(hipA)
 		self.hipB = math.ceil(hipB)
-		self.error = 0
+		self.error_pasos = 0
+		self.error_tiempo = 0
 
 	def __str__(self):
-		return "{0},{1},{2},{3},{4},{5},{6},{7},{8}".format(self.cadA, self.largoA, self.cadB, self.largoB, self.pasos, self.tiempo, self.hipA, self.hipB, self.error)
+		return "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}".format(self.cadA, self.largoA, self.cadB, self.largoB, self.pasos, self.tiempo, self.hipA, self.hipB, self.error_pasos, self.error_tiempo)
 
 	@staticmethod
 	def Pasos(results):
@@ -40,6 +41,11 @@ class Resultado:
 		return np.array(arr)
 
 	@staticmethod
-	def SetErrores(x, errores):
+	def SetErroresPasos(x, errores):
 		for i in range(len(x)):
-			x[i].error = errores[i]
+			x[i].error_pasos = errores[i]
+
+	@staticmethod
+	def SetErroresTiempo(x, errores):
+		for i in range(len(x)):
+			x[i].error_tiempo = errores[i]

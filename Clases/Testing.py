@@ -60,43 +60,41 @@ class Test:
 
 	@staticmethod
 	def TestHipotesis(results, hip, save = False, name = "", show = True):
-		hipA    = hip(results)
+		hipotesis    = hip(results)
 		pasos   = Resultado.Pasos(results)
 		tiempos = Resultado.Tiempos(results)
 
-		h_pasos = np.vstack([hipA, np.ones(len(hipA))]).T
+		h_pasos = np.vstack([hipotesis, np.ones(len(hipotesis))]).T
 		m_pasos, c_pasos = np.linalg.lstsq(h_pasos, pasos, rcond=None)[0]
-		y_pasos = m_pasos * hipA + c_pasos
+		y_pasos = m_pasos * hipotesis + c_pasos
 
-		h_tiempos = np.vstack([hipA, np.ones(len(hipA))]).T
+		h_tiempos = np.vstack([hipotesis, np.ones(len(hipotesis))]).T
 		m_tiempos, c_tiempos = np.linalg.lstsq(h_tiempos, tiempos, rcond=None)[0]
-		y_tiempos = m_tiempos * hipA + c_tiempos
+		y_tiempos = m_tiempos * hipotesis + c_tiempos
 
-		errores = Resultado.Errores(pasos, y_pasos)
-		Resultado.SetErrores(results, errores)
-		_, p = stats.normaltest(errores)
+		err_pasos = Resultado.Errores(pasos, y_pasos)
+		err_tiempos = Resultado.Errores(tiempos, y_tiempos)
+		Resultado.SetErroresPasos(results, err_pasos)
+		Resultado.SetErroresTiempo(results, err_tiempos)
+
 		alpha = 0.001
 
-		fig, axis = plt.subplots(3, 1, constrained_layout = True)
-		axis[0].plot(hipA, pasos, 'go', label='Empírico', markersize = 3)
-		axis[0].plot(hipA, y_pasos, 'r-', label='Teórico')
+		fig, axis = plt.subplots(4, 1, constrained_layout = True, )
+		axis[0].plot(hipotesis, pasos, 'go', label='Empírico', markersize = 3)
+		axis[0].plot(hipotesis, y_pasos, 'r-', label='Teórico')
 		axis[0].set_title("Pasos")
 
-		axis[1].plot(hipA, tiempos, 'go', label='Empírico', markersize = 3)
-		axis[1].plot(hipA, y_tiempos, 'r-', label='Teórico')
+		axis[1].plot(hipotesis, tiempos, 'go', label='Empírico', markersize = 3)
+		axis[1].plot(hipotesis, y_tiempos, 'r-', label='Teórico')
 		axis[1].set_title("Tiempo")
 
-		axis[2].hist(errores, bins = 100)
-		axis[2].set_title("Errores")
+		_, p = stats.normaltest(err_pasos)
+		axis[2].hist(err_pasos, bins = 100)
+		axis[2].set_title("Errores pasos - "+"Normal: {}".format("No" if p<alpha else "Sí"))
 
-		# while p < alpha:
-		# 	alpha -= 0.0001
-		print("p: " + str(p), "alpha: " + str(alpha))
-		# fig.suptitle("La hipotesis no puede ser rechazada")	
-		# if p < alpha:
-		# 	fig.suptitle("La hipotesis puede ser rechazada")
-		# else:
-		# 	fig.suptitle("La hipotesis no puede ser rechazada")	
+		_, p = stats.normaltest(err_tiempos)
+		axis[3].hist(err_tiempos, bins = 100)
+		axis[3].set_title("Errores tiempos - "+"Normal: {}".format("No" if p<alpha else "Sí"))
 
 		if save:
 			current_path = os.getcwd() + "\\Resultados"
@@ -121,11 +119,11 @@ class Test:
 		Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "BOTTOM-UP - HIP B", False)
 		Test.SaveToCSV(prueba, "BOTTOM-UP - HIP B")
 
-		# prueba = Test.GenerateTestSample(n, Test.GenerateNaive, l)
-		# Test.TestHipotesis(prueba, Resultado.HipotesisA, True, "NAIVE - HIP A", False)
-		# Test.SaveToCSV(prueba, "NAIVE - HIP A")
-		# Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "NAIVE - HIP B", False)
-		# Test.SaveToCSV(prueba, "NAIVE - HIP B")
+		prueba = Test.GenerateTestSample(n, Test.GenerateNaive, l)
+		Test.TestHipotesis(prueba, Resultado.HipotesisA, True, "NAIVE - HIP A", False)
+		Test.SaveToCSV(prueba, "NAIVE - HIP A")
+		Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "NAIVE - HIP B", False)
+		Test.SaveToCSV(prueba, "NAIVE - HIP B")
 
 	@staticmethod
 	def SaveToCSV(results, name):
@@ -136,5 +134,3 @@ class Test:
 			csv.write("Cadena A,Largo A,Cadena B,Largo B,Pasos,Tiempo(ms),Hipotesis A,HipotesisB,Error\n")
 			for result in results:
 				csv.write(str(result) + "\n")
-
-Test.TestAll(10000, 100)
