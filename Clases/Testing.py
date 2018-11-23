@@ -11,10 +11,10 @@ from Resultado import Resultado
 
 class Test:
 	@staticmethod
-	def GenerateRandomString(length, rand = False):
+	def GenerateRandomString(length, rand = True):
 		letters = string.ascii_letters + string.digits
 		if rand:
-			length = random.randint(2, length)
+			length = random.randint(0, length)
 		return ''.join(random.choice(letters) for i in range(length)), length
 
 	@staticmethod
@@ -146,11 +146,11 @@ class Test:
 		Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "BOTTOM-UP - HIP B", False)
 		Test.SaveToCSV(prueba, "BOTTOM-UP - HIP B")
 
-		prueba = Test.GenerateTestSample(n, Test.GenerateNaive, l)
-		Test.TestHipotesis(prueba, Resultado.HipotesisA, True, "NAIVE - HIP A", False)
-		Test.SaveToCSV(prueba, "NAIVE - HIP A")
-		Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "NAIVE - HIP B", False)
-		Test.SaveToCSV(prueba, "NAIVE - HIP B")
+		# prueba = Test.GenerateTestSample(n, Test.GenerateNaive, l)
+		# Test.TestHipotesis(prueba, Resultado.HipotesisA, True, "NAIVE - HIP A", False)
+		# Test.SaveToCSV(prueba, "NAIVE - HIP A")
+		# Test.TestHipotesis(prueba, Resultado.HipotesisB, True, "NAIVE - HIP B", False)
+		# Test.SaveToCSV(prueba, "NAIVE - HIP B")
 
 	@staticmethod
 	def SaveToCSV(results, name):
