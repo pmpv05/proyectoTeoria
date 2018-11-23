@@ -1,6 +1,6 @@
 __pycache__
 .vscode/.ropeproject/config.py
 .vscode/.ropeproject/objectdb
-.pyc
-.csv
-.png
+*.pyc
+*.csv
+*.png
