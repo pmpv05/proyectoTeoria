@@ -131,6 +131,6 @@ class Test:
 		if not os.path.exists(current_path):
 			os.makedirs(current_path)
 		with open(current_path + "/" + str(name) + ".csv", "w") as csv:
-			csv.write("Cadena A,Largo A,Cadena B,Largo B,Pasos,Tiempo(ms),Hipotesis A,HipotesisB,Error\n")
+			csv.write("Cadena A,Largo A,Cadena B,Largo B,Pasos,Tiempo(ms),Hipotesis A,HipotesisB,Error pasos, Error tiempos\n")
 			for result in results:
 				csv.write(str(result) + "\n")
