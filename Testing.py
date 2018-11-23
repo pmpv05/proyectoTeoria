@@ -64,10 +64,12 @@ class Test:
 		h_pasos = np.vstack([hipA, np.ones(len(hipA))]).T
 		m_pasos, c_pasos = np.linalg.lstsq(h_pasos, pasos, rcond=None)[0]
 		y_pasos = m_pasos * hipA + c_pasos
+		print("\nFunción Pasos: "+"y = "+str(m_pasos)+"x + "+str(c_pasos)+"\n")
 
 		h_tiempos = np.vstack([hipA, np.ones(len(hipA))]).T
 		m_tiempos, c_tiempos = np.linalg.lstsq(h_tiempos, tiempos, rcond=None)[0]
 		y_tiempos = m_tiempos * hipA + c_tiempos
+		print("\nFunción Tiempos: "+"y = "+str(m_tiempos)+"x + "+str(c_tiempos)+"\n")
 
 		fig, axis = plt.subplots(2, 1, constrained_layout = True)
 		axis[0].plot(hipA, pasos, 'go', label='Empírico', markersize = 3)
@@ -79,6 +81,7 @@ class Test:
 		axis[1].set_title("Tiempo")
 
 		_, p = stats.normaltest(Resultado.Errores(pasos, y_pasos))
+		print("\np es: " + str(p)+"\n")
 		alpha = 0.05
 		if p < alpha:  # null hypothesis: x comes from a normal distribution
 			fig.suptitle("La hipotesis puede ser rechazada")
@@ -125,4 +128,4 @@ class Test:
 			for result in results:
 				csv.write(str(result) + "\n")
 
-Test.TestAll(10000, 50)
+# Test.TestAll(10000, 50)
