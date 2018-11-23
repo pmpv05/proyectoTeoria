@@ -8,8 +8,8 @@ class LCS:
 		"""
 			A = Primer string
 			B = Segundo string
-			a = Largo de la cadena del string A
-			b = Largo de la cadena del string B
+			a = Largo de la cadena A
+			b = Largo de la cadena B
 		"""
 		if a == 0 or b == 0:
 			return 1
@@ -22,8 +22,8 @@ class LCS:
 		"""
 			A = Primer string
 			B = Segundo string
-			a = Largo de la cadena del string A
-			b = Largo de la cadena del string B
+			a = Largo de la cadena A
+			b = Largo de la cadena B
 			M = Matrix(a+1,b+1)
 		"""
 		if M[a][b] is not None:
@@ -89,11 +89,12 @@ class LCS:
 			result = 0
 		elif M[a][b] is not None:
 			return M[a][b]
-		elif A[a] == B[b]:
+		elif a == 0 or b == 0:
+			result = 0
+		elif A[a-1] == B[b-1]:
 			result = 1 + LCS.EfficientLCS(A, B, a-1, b-1, M)
 		else:
 			result = max(LCS.EfficientLCS(A, B, a-1, b, M), LCS.EfficientLCS(A, B, a, b-1, M))
-
 		return result
 
 	@staticmethod
