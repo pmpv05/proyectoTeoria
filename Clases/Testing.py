@@ -58,6 +58,31 @@ class Test:
 			print(_)
 		return arrResultados
 
+	# @staticmethod
+	# def SaveGraph(results, name, save = True, show = False):
+	# 	pasos = Resultado.Pasos(results)
+	# 	tiempos = Resultado.Tiempos(results)
+	# 	absisas = [x.largoA + x.largoB for x in results]
+
+	# 	fig, axis = plt.subplots(2, 1, constrained_layout = True)
+
+	# 	axis[0].plot(absisas, pasos, 'g-', label='Empírico', markersize = 3)
+	# 	axis[0].plot(absisas, y_pasos, 'r-', label='Teórico')
+	# 	axis[0].set_title("Pasos")
+
+	# 	axis[1].plot(absisas, tiempos, 'go', label='Empírico', markersize = 3)
+	# 	axis[1].plot(absisas, y_tiempos, 'r-', label='Teórico')
+	# 	axis[1].set_title("Tiempo")
+
+	# 	if save:
+	# 		current_path = os.getcwd() + "\\Resultados"
+	# 		if not os.path.exists(current_path):
+	# 			os.makedirs(current_path)
+	# 		fig.savefig(current_path + "/" + name + " - Valores"+ ".png")
+
+	# 	if show:
+	# 		plt.show()
+
 	@staticmethod
 	def TestHipotesis(results, hip, save = False, name = "", show = True):
 		hipotesis    = hip(results)
@@ -67,10 +92,12 @@ class Test:
 		h_pasos = np.vstack([hipotesis, np.ones(len(hipotesis))]).T
 		m_pasos, c_pasos = np.linalg.lstsq(h_pasos, pasos, rcond=None)[0]
 		y_pasos = m_pasos * hipotesis + c_pasos
+		Resultado.SetYPasos(results, y_pasos)
 
 		h_tiempos = np.vstack([hipotesis, np.ones(len(hipotesis))]).T
 		m_tiempos, c_tiempos = np.linalg.lstsq(h_tiempos, tiempos, rcond=None)[0]
 		y_tiempos = m_tiempos * hipotesis + c_tiempos
+		Resultado.SetYTiempo(results, y_tiempos)
 
 		err_pasos = Resultado.Errores(pasos, y_pasos)
 		err_tiempos = Resultado.Errores(tiempos, y_tiempos)
@@ -79,7 +106,7 @@ class Test:
 
 		alpha = 0.001
 
-		fig, axis = plt.subplots(4, 1, constrained_layout = True, )
+		fig, axis = plt.subplots(4, 1, constrained_layout = True)
 		axis[0].plot(hipotesis, pasos, 'go', label='Empírico', markersize = 3)
 		axis[0].plot(hipotesis, y_pasos, 'r-', label='Teórico')
 		axis[0].set_title("Pasos")
@@ -131,6 +158,6 @@ class Test:
 		if not os.path.exists(current_path):
 			os.makedirs(current_path)
 		with open(current_path + "/" + str(name) + ".csv", "w") as csv:
-			csv.write("Cadena A,Largo A,Cadena B,Largo B,Pasos,Tiempo(ms),Hipotesis A,HipotesisB,Error pasos, Error tiempos\n")
+			csv.write("Cadena A,Largo A,Cadena B,Largo B,Pasos,Tiempo(ms),Hipotesis A,HipotesisB,Y Pasos,Error pasos,Y Tiempo, Error tiempos\n")
 			for result in results:
 				csv.write(str(result) + "\n")
